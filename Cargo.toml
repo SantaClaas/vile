@@ -1,0 +1,52 @@
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+
+[workspace.package]
+version = "0.0.0"
+edition = "2024"
+# The same version as rust-toolchain.toml; tsrs needs at least this one.
+rust-version = "1.100"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/SantaClaas/vile"
+publish = false
+
+[workspace.dependencies]
+# Pinned exactly, as every dependency here: a version is picked a week or more after its release,
+# like the npm packages (see Sources in docs/guidelines/rust.md), and Dependabot proposes updates
+# with the same wait.
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.154"
+
+# Strict on purpose, after Oxc and tsrs (see Checks in docs/guidelines/rust.md). An exception is
+# #[expect(clippy::lint, reason = "...")] on the smallest item it covers; #[allow] isn't allowed.
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_debug_implementations = "warn"
+unreachable_pub = "warn"
+
+[workspace.lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "deny", priority = -1 }
+cargo = { level = "deny", priority = -1 }
+# Exceptions say why, and can't outlive their cause.
+allow_attributes = "deny"
+allow_attributes_without_reason = "deny"
+# A value that can't be missing is shown to be present, or expect() says why.
+unwrap_used = "deny"
+# A hash map's order must never reach output, an ID or a report.
+iter_over_hash_type = "deny"
+# Leftovers don't land.
+dbg_macro = "deny"
+todo = "deny"
+unimplemented = "deny"
+print_stdout = "deny"
+print_stderr = "deny"
+# The crates aren't published yet, so they have no crates.io metadata to check. Turned back on
+# with the first release.
+cargo_common_metadata = "allow"
+
+[profile.release]
+lto = "fat"
+codegen-units = 1

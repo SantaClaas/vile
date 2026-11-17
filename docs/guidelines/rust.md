@@ -10,7 +10,7 @@ paths:
 
 # Rust
 
-How the Rust in `crates/` is named, split, checked and released. It adds to [`docs/guidelines/principles.md`](principles.md), which always applies: the names, the pure core, the modules and the stages where rules are enforced hold in Rust as they do in TypeScript. Where Rust has its own way of doing the same thing, this file says which.
+How the Rust in [`crates/`](../../crates/) is named, split, checked and released. It adds to [`docs/guidelines/principles.md`](principles.md), which always applies: the names, the pure core, the modules and the stages where rules are enforced hold in Rust as they do in TypeScript. Where Rust has its own way of doing the same thing, this file says which.
 
 ## Sources
 
@@ -19,8 +19,8 @@ How the Rust in `crates/` is named, split, checked and released. It adds to [`do
 ## The workspace
 
 - **One crate per feature**, named `vile_<noun>` like Oxc's `oxc_<noun>`: `vile_core`, `vile_generate`, `vile_types`, `vile_report`. A crate passes the package test from the principles: it could be published or deleted without touching much else. The dependencies between crates go one way, and Cargo refuses a cycle.
-- **Versions are pinned exactly** (`=1.2.3`) for Oxc and tsrs, whose minor releases break APIs, and in the workspace's `[workspace.dependencies]`, so every crate uses the same one.
-- **The toolchain is pinned** in `rust-toolchain.toml`, with `rust-version` in `Cargo.toml` set to the same version, so clippy finds the same things everywhere. tsrs needs at least the version pinned there. An upgrade is a pull request of its own.
+- **Versions are pinned exactly** (`=1.2.3`), in the workspace's `[workspace.dependencies]`, so every crate uses the same one. Oxc and tsrs break their APIs in minor releases, so for them it's a must. Cargo has no setting like pnpm's `minimumReleaseAge`, so pick a version that's been out for a week or more by hand; Dependabot proposes updates with the same wait.
+- **The toolchain is pinned** in [`rust-toolchain.toml`](../../rust-toolchain.toml), with `rust-version` in [`Cargo.toml`](../../Cargo.toml) set to the same version, so clippy finds the same things everywhere. tsrs needs at least the version pinned there. An upgrade is a pull request of its own.
 
 ## Names
 
@@ -48,7 +48,7 @@ The principles' rules apply: **no abbreviations** (`expression`, not `expr`; `sp
 - **No `unsafe`.** The vile crates `forbid(unsafe_code)`. The binding to Node is napi-rs's generated code, outside our crates.
 - **No `unwrap()` in library code.** A value that can't be missing is shown to be present, or `expect("why it can't fail")` says why, which is Rust's version of an explained type assertion (see "Where rules are enforced" in the principles). Tests may `unwrap()`.
 - **rustfmt** formats with its defaults; `cargo fmt --check` runs in CI.
-- **cargo-deny** (`deny.toml`) checks the licenses of every dependency against the allowed list, refuses crates from anywhere but crates.io, and reports advisories. A license or a source that isn't allowed fails CI.
+- **cargo-deny** ([`deny.toml`](../../deny.toml)) checks the licenses of every dependency against the allowed list, refuses crates from anywhere but crates.io, and reports advisories. A license or a source that isn't allowed fails CI.
 - **Third-party notices** are generated from `Cargo.lock`, never written by hand, so they can't drift from what's linked. tsrs's `NOTICE` (TypeScript and DefinitelyTyped) ships with every binary that includes it.
 
 ## Tests

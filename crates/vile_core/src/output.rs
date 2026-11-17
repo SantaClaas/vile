@@ -30,7 +30,7 @@ pub struct Record {
     pub outcome: Outcome,
     /// How long its tests ran, in milliseconds. `None` when no test ran.
     pub duration_milliseconds: Option<u64>,
-    /// The tests that failed, for a caught mutant, as Vitest names them.
+    /// The tests that failed, for a killed mutant, as Vitest names them.
     pub failed_tests: Vec<String>,
 }
 
@@ -133,21 +133,21 @@ mod tests {
         let records = vec![
             Record {
                 id: mutant().id,
-                outcome: Outcome::Caught,
+                outcome: Outcome::Killed,
                 duration_milliseconds: Some(12),
                 failed_tests: vec!["slot > isFree > refuses a taken slot".to_owned()],
             },
             Record {
                 id: mutant().id,
-                outcome: Outcome::Missed,
+                outcome: Outcome::Survived,
                 duration_milliseconds: Some(9),
                 failed_tests: Vec::new(),
             },
         ];
         let json = serde_json::to_value(OutcomesFile::new(records)).expect("it serializes");
         assert_eq!(json["formatVersion"], 1);
-        assert_eq!(json["summary"]["caught"], 1);
-        assert_eq!(json["summary"]["notReached"], 0);
+        assert_eq!(json["summary"]["killed"], 1);
+        assert_eq!(json["summary"]["noCoverage"], 0);
         assert_eq!(json["score"], 0.5);
         assert_eq!(json["records"][0]["durationMilliseconds"], 12);
         assert_eq!(

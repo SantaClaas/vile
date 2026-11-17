@@ -50,13 +50,14 @@ flowchart LR
 
 | Outcome | Meaning | Tests run? |
 | --- | --- | --- |
-| caught | A test failed | yes |
-| missed | Every covering test passed | yes |
+| killed | A test failed | yes |
+| survived | Every covering test passed | yes |
 | timeout | Ran past the limit and was killed. Reported, often a loop guard | yes |
-| unviable | tsrs found a type error | no |
+| compile error | tsrs found a type error | no |
+| runtime error | The module failed to load or the test run crashed | yes |
 | equivalent | The minified code is identical to the original's (Trivial Compiler Equivalence) | no |
-| not reached | No test runs this code. Reported as untested code, not as survivors | no |
-| skipped | A disable comment or an arid rule | no |
+| no coverage | No test runs this code. Reported as untested code, not as survivors | no |
+| ignored | A disable comment or an arid rule | no |
 
 ## Mutation operators
 
@@ -96,7 +97,7 @@ Left out at first: string literal changes, the mutation of numeric literals in c
 
 Google's productivity went from about 15% to 89% through filtering, not through more operators (Petrović et al., *Practical Mutation Testing at Scale*). In order:
 
-1. **Unviable:** the tsrs check, before any test runs.
+1. **Compile errors:** the tsrs check, before any test runs.
 2. **Equivalent and duplicate:** Trivial Compiler Equivalence (Papadakis et al., ICSE 2015). Minify the enclosing function, original and mutant, with Oxc's minifier. If the output is identical, the mutant is equivalent; mutants with identical output are duplicates, and one of them runs.
 3. **Arid code:** never mutated. Defaults: `console.*`, calls whose name starts with `log`, and capacity or size hints. The project config adds more, like cargo-mutants' `skip_calls`. Each rule is checked against real feedback.
 4. **Disable comments,** shaped like oxlint's, with a required reason: `// vile-disable-next-line relational -- cache key, order doesn't matter`, plus `// vile-disable` before a function for all of it. A disable without a reason is an error.
@@ -106,14 +107,14 @@ Google's productivity went from about 15% to 89% through filtering, not through 
 
 Google's paper says "we generate at most a single mutant in a line" and gives no reason for choosing the line. Its code is formatted by tools, so a line is a stable stand-in there. A companion study found that when one mutant on a line is killed, the others usually are too. A line is still a property of formatting, not of the code. The tool:
 
-- **Full runs:** runs every viable, non-equivalent mutant, and reduces with the sufficient sets and the equivalence check rather than sampling.
+- **Full runs:** runs every mutant that type-checks and isn't equivalent, and reduces with the sufficient sets and the equivalence check rather than sampling.
 - **Review mode and `--in-diff`:** groups survivors by their smallest enclosing statement and shows one per group, with the rest folded under it. A statement with two independent decisions (`a < b && c > d`) still shows only one.
 
 ## Workflow features (from cargo-mutants)
 
 - **Baseline first.** Tests that already fail stop the run. The baseline time sets the timeout: 5× the baseline, at least 20 s by default.
 - **Reach map.** During the baseline, a counter in each mutant's branch records which tests reach it (PIT's and Stryker's per-test coverage). Each mutant then runs only the tests that reach it, fastest first, and stops at the first failure.
-- **`--list`** with diffs, and **`--in-diff <file>`** to mutate only changed lines. **`--iterate`** retests only what was missed. **`--shard k/n`** splits a run for CI.
+- **`--list`** with diffs, and **`--in-diff <file>`** to mutate only changed lines. **`--iterate`** retests only what survived. **`--shard k/n`** splits a run for CI.
 - **Mutant identity** that survives edits elsewhere: the file, the enclosing function's name path, a hash of the original snippet, the operator and the replacement. Not line and column, which is the weak spot cargo-mutants names in `--iterate`.
 - **`vile.out/`**, written as the run goes (cargo-mutants' `mutants.out/`):
   - `mutants.json` and `outcomes.json`
@@ -181,7 +182,7 @@ The main session reviews both and adjusts the contracts.
 | Agent | Owns | Needs | Done when |
 | --- | --- | --- | --- |
 | **A generate** | `crates/vile_generate`: operators above, skip rules (tests, disable comments, arid calls), mutant identity | contracts | Every operator has fixture tests. Identity holds across unrelated edits |
-| **B types** | `crates/vile_types`: tsrs project, return-type shapes for body replacement, viability check | S2 verdict | Unviable mutants in fixtures are rejected with their diagnostic. Time per check documented |
+| **B types** | `crates/vile_types`: tsrs project, return-type shapes for body replacement, compile check | S2 verdict | Mutants with compile errors in fixtures are rejected with their diagnostic. Time per check documented |
 | **C equivalence** | `crates/vile_equivalence`: Trivial Compiler Equivalence and duplicate grouping | contracts | Fixtures with known equivalent mutants (cache, sort order nothing reads) are labelled |
 | **D schemata** | `crates/vile_schemata`: one module per file with switches, reach counters and source maps, through Oxc's transformer | A's mutants | Every operator gives the same result as schema and as patched text |
 | **E runner** | `packages/vitest`: baseline, reach map, scheduling, timeouts and kills, shards, Ctrl-C | D | Hangs end as timeouts. A killed worker doesn't break the run. Results match S1 |

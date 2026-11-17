@@ -27,7 +27,7 @@ How the Rust in `crates/` is named, split, checked and released. It adds to [`do
 The principles' rules apply: **no abbreviations** (`expression`, not `expr`; `span`, not `sp`; `context`, not `ctx`), except where a name belongs to the other side of an edge, such as Oxc's `AstKind` or tsrs's `P<Node>`. Rust's own conventions come first where they differ: `snake_case` functions, `UpperCamelCase` types, and the standard names (`new`, `from`, `into_*`, `as_*`, `is_*`, `iter`).
 
 - **A function starts with a verb**, as in TypeScript, except Rust's conventional constructors and conversions (`new`, `from_*`) and getters, which Rust names after what they return (`span()`, not `get_span()`).
-- **A predicate is a question**: `is_viable`, `is_arid`.
+- **A predicate is a question**: `is_killed`, `is_arid`.
 - **Module functions drop the module's noun**, as the principles say: `operator::all()`, not `operator::all_operators()`.
 
 ## Functions
@@ -37,7 +37,8 @@ The principles' rules apply: **no abbreviations** (`expression`, not `expr`; `sp
 - **Declare before use.** Rust doesn't need it, but files still read bottom-up: types, constants and helpers first, the module's public entry point last. No lint checks it, so review does.
 - **Errors are values.** What a caller can act on is a `Result` whose error is an `enum` naming each case (`ParseError::UnexpectedToken`), never a `String` and never `Box<dyn Error>` inside a library crate. The CLI turns them into messages for people at the edge. A panic is for a bug in vile, as a throw is in TypeScript.
 - **`?` is the one-operation `try`.** Each fallible call gets its own `?`, with `map_err` where the error needs the context of that one operation.
-- **Cleanup is `Drop`.** A guard that restores something when its scope ends, however it ends (a file written back, a worker killed), is a type with `Drop`, the way TypeScript uses `using`. A guard nobody reads is bound to `_name`, never to `_`, which drops it at once.
+- **Cleanup that can't fail and doesn't wait is `Drop`.** A guard that restores something when its scope ends, however it ends (a lock released, a temporary file removed), is a type with `Drop`. A guard nobody reads is bound to `_name`, never to `_`, which drops it at once.
+- **`Drop` isn't TypeScript's `using`.** It can't be awaited (Rust has no async drop on stable), it can't return an error, and it doesn't run when the process exits or aborts, or when a value is leaked. So cleanup that waits or can fail, such as stopping a worker process and waiting for it or writing a file back, is an explicit method that consumes the value and returns a `Result` (`worker.stop().await?`), called on every path. `Drop` stays as the safety net for the paths that miss it: it does only what can be done at once without failing, such as sending a kill signal, and never blocks. Where vile changes the user's files (`--in-place`) and must put them back however it stops (see [A tool, not an app](principles.md#a-tool-not-an-app)), a guard isn't enough on its own: it also restores them on Ctrl-C, and checks for leftovers at its next start.
 - **Deterministic output.** vile's results must be the same on every run: never let a hash map's iteration order reach output, a mutant's ID or a report. Sort, or use an ordered map. Clippy's `iter_over_hash_type` is on for this, after tsrs.
 
 ## Checks

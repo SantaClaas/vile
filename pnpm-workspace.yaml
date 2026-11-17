@@ -20,6 +20,13 @@ minimumReleaseAgeIgnoreMissingTime: false
 # Fails when a version has weaker trust evidence (trusted publishing, provenance) than an earlier
 # release of the same package, a sign that someone else published it.
 trustPolicy: no-downgrade
+trustPolicyExclude:
+  # tsrs's 0.0.0-bootstrap.0 (2026-10-10) was published by hand by Oxc's maintainer with a 2FA
+  # approval, which pnpm ranks as a staged publish, its strongest evidence. Every release since
+  # comes from GitHub Actions as a trusted publisher with provenance, one rank lower, so pnpm
+  # refuses all of them. This release's provenance says it was built by .github/workflows/release.yml
+  # on main of github.com/oxc-project/tsrs. Renew this line, with the same check, for each update.
+  - "tsrs@0.24.0-ts7.1.0-beta"
 
 # Only the dependencies in package.json may come from git or a tarball URL, never transitive ones.
 blockExoticSubdeps: true

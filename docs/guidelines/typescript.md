@@ -67,13 +67,13 @@ How to use them:
 
 **A library that can only signal by throwing gets one private error class**, thrown where the value enters the library and caught right where its call returns. Drizzle's sqlite-proxy callback can only give back rows or throw, so [`src/database/drizzle.ts`](https://github.com/SantaClaas/week-budget-planner/blob/main/src/database/drizzle.ts) throws `NewerVersionThroughDrizzle` for a `"newer-version"` answer, and `runOnDatabase` turns it back into the value around the queries; the class never leaves the module. Look along the error's `cause` chain, since a library may wrap the error on the way (Drizzle does, in `DrizzleQueryError`), and test the round trip through the real library.
 
-**A `Result` must be used**, as in Rust, where `Result` is `#[must_use]`. A call whose `Result` is thrown away is a mistake: the value is lost, and so is the problem, which nobody hears about. In the planner, `pnpm typecheck` runs [`scripts/check-must-use.ts`](https://github.com/SantaClaas/week-budget-planner/blob/main/scripts/check-must-use.ts) after `tsc`, and vile adds it with its first package that returns a `Result`. The check fails on a call that's a statement of its own and gives back a `Result`, awaited or not. Where throwing it away is right, `void` in front of the call says so: `void parseDayCount(value)`.
+**A `Result` must be used**, as in Rust, where `Result` is `#[must_use]`. A call whose `Result` is thrown away is a mistake: the value is lost, and so is the problem, which nobody hears about. In the planner, `pnpm typecheck` runs [`scripts/check-must-use.ts`](https://github.com/SantaClaas/week-budget-planner/blob/main/scripts/check-must-use.ts) after `tsc`, and vile adds it, running on tsrs, with its first package that returns a `Result`. The check fails on a call that's a statement of its own and gives back a `Result`, awaited or not. Where throwing it away is right, `void` in front of the call says so: `void parseDayCount(value)`.
 
 **`@mustUse` marks a function whose value matters** although it isn't a `Result`, like Rust's `#[must_use]` on a function: a function that gives back the way to stop or undo what it started, such as an unsubscribe function. Put the tag in the JSDoc of the function, or of the method in its type. The same check fails where its value is thrown away.
 
 **Promises are the lint's job.** `typescript/no-floating-promises` fails on a promise that's neither awaited, handled with `.catch` or a rejection handler, nor marked with `void`, and `no-misused-promises` on an `async` function passed where nothing waits for it. `void` on a promise doesn't handle its errors: use it only on a promise that can't fail, or that handles its own failure, and say which in a comment.
 
-Everything else may be thrown away without `void`: `array.push()` and `map.set()` give back a value nobody needs. TypeScript has no plugins and no rule for this, so the check asks its type checker through the API TypeScript 7 ships as `typescript/unstable/sync`. Only our build depends on it, and its test pins down what it relies on, so a TypeScript update that changes the API fails there first.
+Everything else may be thrown away without `void`: `array.push()` and `map.set()` give back a value nobody needs. TypeScript has no plugins and no rule for this, so the check asks its type checker through the API TypeScript 7 ships as `typescript/unstable/sync`, which tsrs ships as `tsrs/sync`. Only our build depends on it, and its test pins down what it relies on, so a TypeScript update that changes the API fails there first.
 
 ## Discriminated unions
 
@@ -104,6 +104,8 @@ The types come from the `ESNext` lib. vile's own code runs on Node only, and eve
 ## Formatting and linting
 
 **oxfmt formats, oxlint lints, and CI checks both.** Run `pnpm format` and `pnpm lint` before committing. The formatter keeps its defaults: 100 columns, double quotes, trailing commas. Markdown isn't formatted, so tables and long lines in the docs stay as written.
+
+**tsrs checks the types**, the Rust port of TypeScript 7 that vile itself is built on (`pnpm typecheck` runs `tsrs -b`), and oxlint runs its type-aware rules through `tsrs-lint`, so the tool vile depends on gets used every day. tsrs is a beta: where it and TypeScript disagree, that's a bug to report to tsrs, not a reason to change the code.
 
 **Both the linter and the compiler are strict.** The lint runs the correctness, suspicious, perf and pedantic categories as errors, with type-aware rules (floating promises, unsafe `any`, misused promises and the like) and a few rules picked from the style and restriction categories. TypeScript runs with `strict` plus `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noImplicitReturns`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature` and `noUncheckedSideEffectImports`, and no unused or unreachable code. Everything is checked: the packages, the tests, the oxlint plugins and the scripts.
 

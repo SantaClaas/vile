@@ -1,0 +1,19 @@
+import { definePlugin } from "@oxlint/plugins";
+
+import noElse from "./no-else.ts";
+import oneOperationPerTry from "./one-operation-per-try.ts";
+import preferUsing from "./prefer-using.ts";
+import shorterBranchFirst from "./shorter-branch-first.ts";
+import requireReason from "./require-reason.ts";
+
+/** The project's own lint rules, named `vile/<rule>` in .oxlintrc.json. */
+export default definePlugin({
+  meta: { name: "vile" },
+  rules: {
+    "no-else": noElse,
+    "one-operation-per-try": oneOperationPerTry,
+    "prefer-using": preferUsing,
+    "shorter-branch-first": shorterBranchFirst,
+    "require-reason": requireReason,
+  },
+});

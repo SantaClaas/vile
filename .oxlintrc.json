@@ -89,7 +89,9 @@
     "builtin": true,
     "node": true
   },
-  "ignorePatterns": ["target/**", "vile.out/**", "fixtures/**/vile.out/**"],
+  // The fixture projects are written to give known mutants, not to follow our rules (see
+  // fixtures/README.md); their expectations' own test is linted.
+  "ignorePatterns": ["target/**", "vile.out/**", "fixtures/*/**"],
   "overrides": [
     {
       "files": ["scripts/**"],

@@ -1,0 +1,114 @@
+{
+  "$comment": "Every mutant vile should make in this fixture with these operators, and what should happen to it. See fixtures/README.md.",
+  "operators": ["body-replacement"],
+  "mutants": [
+    {
+      "file": "src/value.ts",
+      "line": 2,
+      "operator": "body-replacement",
+      "replacement": "{ return \"\"; }",
+      "outcome": "caught"
+    },
+    {
+      "file": "src/value.ts",
+      "line": 2,
+      "operator": "body-replacement",
+      "replacement": "{ return \"xyzzy\"; }",
+      "outcome": "caught"
+    },
+    {
+      "file": "src/value.ts",
+      "line": 6,
+      "operator": "body-replacement",
+      "replacement": "{ return []; }",
+      "outcome": "caught"
+    },
+    {
+      "file": "src/value.ts",
+      "line": 10,
+      "operator": "body-replacement",
+      "replacement": "{ return undefined; }",
+      "outcome": "caught"
+    },
+    {
+      "file": "src/value.ts",
+      "line": 10,
+      "operator": "body-replacement",
+      "replacement": "{ return \"\"; }",
+      "outcome": "caught"
+    },
+    {
+      "file": "src/value.ts",
+      "line": 10,
+      "operator": "body-replacement",
+      "replacement": "{ return \"xyzzy\"; }",
+      "outcome": "caught"
+    },
+    {
+      "file": "src/value.ts",
+      "line": 15,
+      "operator": "body-replacement",
+      "replacement": "{}",
+      "outcome": "missed",
+      "note": "no test looks at the log"
+    },
+    {
+      "file": "src/countdown.ts",
+      "line": 2,
+      "operator": "body-replacement",
+      "replacement": "{ return true; }",
+      "outcome": "caught"
+    },
+    {
+      "file": "src/countdown.ts",
+      "line": 2,
+      "operator": "body-replacement",
+      "replacement": "{ return false; }",
+      "outcome": "timeout",
+      "note": "the loop in countDown never ends"
+    },
+    {
+      "file": "src/countdown.ts",
+      "line": 6,
+      "operator": "body-replacement",
+      "replacement": "{ return 0; }",
+      "outcome": "caught"
+    },
+    {
+      "file": "src/countdown.ts",
+      "line": 6,
+      "operator": "body-replacement",
+      "replacement": "{ return 1; }",
+      "outcome": "caught"
+    },
+    {
+      "file": "src/countdown.ts",
+      "line": 6,
+      "operator": "body-replacement",
+      "replacement": "{ return -1; }",
+      "outcome": "caught"
+    },
+    {
+      "file": "src/cents.ts",
+      "line": 4,
+      "operator": "body-replacement",
+      "replacement": "{ return 0; }",
+      "outcome": "unviable",
+      "note": "a plain number isn't a Cents"
+    },
+    {
+      "file": "src/cents.ts",
+      "line": 4,
+      "operator": "body-replacement",
+      "replacement": "{ return 1; }",
+      "outcome": "unviable"
+    },
+    {
+      "file": "src/cents.ts",
+      "line": 4,
+      "operator": "body-replacement",
+      "replacement": "{ return -1; }",
+      "outcome": "unviable"
+    }
+  ]
+}

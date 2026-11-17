@@ -1,0 +1,15 @@
+{
+  // Strict, as the projects vile runs on usually are: the type check decides which mutants are
+  // unviable, so it must be the same on every run.
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["ESNext", "DOM"],
+    "module": "nodenext",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}

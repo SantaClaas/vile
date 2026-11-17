@@ -1,0 +1,6 @@
+# The same version as rust-version in Cargo.toml, so clippy finds the same things everywhere. tsrs
+# needs at least this version. An upgrade is a pull request of its own (see docs/guidelines/rust.md).
+[toolchain]
+channel = "1.100"
+components = ["clippy", "rustfmt"]
+profile = "minimal"

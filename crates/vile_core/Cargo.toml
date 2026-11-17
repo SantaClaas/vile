@@ -1,0 +1,16 @@
+[package]
+name = "vile_core"
+description = "The data vile's stages pass between them: mutants, patches, outcomes and the files in vile.out/"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

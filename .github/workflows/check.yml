@@ -69,3 +69,26 @@ jobs:
       - uses: crate-ci/typos@4c8b7f51ca60df14e3c5ca82770dfbbe6c3dae85 # v1.52.0
       - run: pnpm test
       - run: pnpm links
+
+  rust:
+    name: Check the Rust
+    runs-on: ubuntu-latest
+    # Stops a job that hangs, instead of GitHub's six hours. It takes a few minutes today.
+    timeout-minutes: 20
+    permissions:
+      contents: read # Reads the repository to check it.
+    env:
+      # rustc's warnings fail the build, as clippy's do (see Checks in docs/guidelines/rust.md).
+      RUSTFLAGS: -D warnings
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # rustup on the runner installs the version in rust-toolchain.toml with its components.
+      - run: rustup toolchain install
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets --locked
+      - run: cargo test --locked
+      - uses: EmbarkStudios/cargo-deny-action@70f81531115945ba6eb6b941ec9d39d063438eb9 # v2.1.2
+        with:
+          command: check

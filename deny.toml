@@ -1,0 +1,24 @@
+# cargo-deny checks every dependency's license, source and advisories (see Checks in
+# docs/guidelines/rust.md). CI fails on anything not allowed here.
+
+[graph]
+all-features = true
+
+[advisories]
+yanked = "deny"
+
+[licenses]
+# Permissive licenses only, which vile's own MIT OR Apache-2.0 can include. Each one added later
+# says which crate needs it.
+allow = ["MIT", "Apache-2.0", "Unicode-3.0"]
+confidence-threshold = 0.9
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+
+[sources]
+# Only crates.io; no git dependencies or other registries.
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

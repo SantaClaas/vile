@@ -1,5 +1,6 @@
 # Opens weekly pull requests that bump the actions in .github/workflows (each pinned hash and the
-# version comment after it together) and the npm dependencies, a week after each release.
+# version comment after it together), the npm dependencies and the crates, a week after each
+# release.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -34,5 +35,24 @@ updates:
         dependency-type: development
       production:
         dependency-type: production
+    commit-message:
+      prefix: Bump
+
+  # The crates, with the same week of waiting as the rest. Oxc and tsrs are pinned exactly and
+  # break their APIs in minor releases, so their updates come one group at a time.
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    versioning-strategy: increase
+    groups:
+      oxc:
+        patterns: ["oxc", "oxc_*"]
+      tsrs:
+        patterns: ["tsrs_*"]
+      crates:
+        patterns: ["*"]
     commit-message:
       prefix: Bump

@@ -1,0 +1,82 @@
+{
+  "$comment": "Every mutant vile should make in this fixture with these operators, and what should happen to it. See fixtures/README.md.",
+  "operators": ["relational", "arithmetic"],
+  "mutants": [
+    {
+      "file": "src/total.ts",
+      "line": 4,
+      "operator": "arithmetic",
+      "original": "+",
+      "replacement": "-",
+      "outcome": "skipped",
+      "note": "arid: an argument of a console call"
+    },
+    {
+      "file": "src/total.ts",
+      "line": 7,
+      "operator": "arithmetic",
+      "original": "-",
+      "replacement": "+",
+      "outcome": "equivalent",
+      "note": "inside a block the minifier removes"
+    },
+    {
+      "file": "src/total.ts",
+      "line": 9,
+      "operator": "arithmetic",
+      "original": "+",
+      "replacement": "-",
+      "outcome": "caught"
+    },
+    {
+      "file": "src/total.ts",
+      "line": 14,
+      "operator": "relational",
+      "original": ">=",
+      "replacement": ">",
+      "outcome": "skipped",
+      "note": "disable comment"
+    },
+    {
+      "file": "src/total.ts",
+      "line": 14,
+      "operator": "relational",
+      "original": ">=",
+      "replacement": "===",
+      "outcome": "skipped"
+    },
+    {
+      "file": "src/total.ts",
+      "line": 14,
+      "operator": "relational",
+      "original": "age >= 18",
+      "replacement": "true",
+      "outcome": "skipped"
+    },
+    {
+      "file": "src/total.ts",
+      "line": 19,
+      "operator": "relational",
+      "original": "<",
+      "replacement": "<=",
+      "outcome": "not-reached",
+      "note": "no test calls isBefore"
+    },
+    {
+      "file": "src/total.ts",
+      "line": 19,
+      "operator": "relational",
+      "original": "<",
+      "replacement": "!==",
+      "outcome": "not-reached"
+    },
+    {
+      "file": "src/total.ts",
+      "line": 19,
+      "operator": "relational",
+      "original": "a < b",
+      "replacement": "false",
+      "outcome": "not-reached"
+    }
+  ]
+}

@@ -3,4 +3,6 @@
   // Finds unused files, exports and dependencies (https://knip.dev). Its plugins read the entry
   // points from the Vitest and oxlint configs; the scripts are run by hand or by CI.
   "entry": ["scripts/*.ts"],
+  // The fixture projects are inputs for vile, which runs them; nothing imports them.
+  "ignore": ["fixtures/*/**"],
 }

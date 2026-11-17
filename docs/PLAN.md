@@ -77,12 +77,14 @@ Start small (selective mutation, Offutt et al.). Every operator has to earn its 
 
    | Original | Replacements |
    | --- | --- |
-   | `<` | `<=`, `!=`, `false` |
-   | `<=` | `<`, `==`, `true` |
-   | `>` | `>=`, `!=`, `false` |
-   | `>=` | `>`, `==`, `true` |
+   | `<` | `<=`, `!==`, `false` |
+   | `<=` | `<`, `===`, `true` |
+   | `>` | `>=`, `!==`, `false` |
+   | `>=` | `>`, `===`, `true` |
    | `===` | `<=`, `>=`, `false` |
    | `!==` | `<`, `>`, `true` |
+
+   The replacements use strict equality (`===`, `!==`), never `==` and `!=`, which convert their operands first.
 
    The `<`/`>` forms of the `===`/`!==` rows only type-check on ordered types, and tsrs drops the rest. NaN breaks some of the subsumption; that's accepted.
 3. **Logical:** `&&` ↔ `||`, and `??` → its left side.

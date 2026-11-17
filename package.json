@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest run --configLoader native",
-    "typecheck": "tsc -b . fixtures/operators fixtures/body-replacement fixtures/filtering",
+    "typecheck": "tsrs -b . fixtures/operators fixtures/body-replacement fixtures/filtering",
     "lint": "oxlint",
     "knip": "knip",
     "format": "oxfmt",
@@ -21,8 +21,7 @@
     "knip": "6.44.2",
     "oxfmt": "0.78.0",
     "oxlint": "1.93.0",
-    "oxlint-tsgolint": "7.0.2006",
-    "typescript": "7.0.2",
+    "tsrs": "0.24.0-ts7.1.0-beta",
     "vitest": "5.1.0"
   },
   "engines": {

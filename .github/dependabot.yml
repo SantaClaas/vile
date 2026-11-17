@@ -30,7 +30,7 @@ updates:
     groups:
       # oxlint, its plugin API and oxfmt are released together.
       oxc:
-        patterns: ["oxlint", "@oxlint/*", "oxfmt", "oxlint-tsgolint"]
+        patterns: ["oxlint", "@oxlint/*", "oxfmt"]
       development:
         dependency-type: development
       production:

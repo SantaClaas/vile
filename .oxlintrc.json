@@ -2,7 +2,8 @@
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   // Strict on purpose (see Formatting and linting in docs/guidelines/typescript.md). Where a rule doesn't
   // apply to one line, disable it there with a reason after "--"; require-reason checks that.
-  // Type-aware rules (floating promises, unsafe any and so on) need oxlint-tsgolint.
+  // Type-aware rules (floating promises, unsafe any and so on) run through tsrs-lint, which oxlint
+  // finds when tsrs is installed.
   "plugins": ["typescript", "unicorn", "oxc", "import", "promise", "vitest", "node"],
   "jsPlugins": ["./oxlint-plugins/index.ts"],
   "categories": {

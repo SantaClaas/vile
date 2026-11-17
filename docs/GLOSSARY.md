@@ -1,6 +1,6 @@
 # Glossary
 
-Use one name per thing, the same way in the CLI's output, the docs and the code.
+Use one name per thing, the same way in the CLI's output, the docs and the code. Where mutation testing already has a standard name, vile uses it.
 
 **Wrong names (look-up only)** lists words people use for a term, often from other tools or from the research. They aren't synonyms: when someone uses one, read it as the term, and answer, write and code with the term alone. Where the research has its own word, the Notes say so, because the docs cite papers that use it.
 
@@ -13,15 +13,16 @@ Use one name per thing, the same way in the CLI's output, the docs and the code.
 | **Schema** | All of a file's mutants in one module, each behind a switch, so tests run against any of them without transforming the file again. | instrumented file, switched code | Plural: schemata. The research says "mutant schemata"; Stryker says "mutation switching" |
 | **Baseline** | The run of the tests against the code before any mutant, which must pass. It sets the timeout and the reach map. | dry run, initial run, clean run | |
 | **Reach map** | Which tests run which sites, recorded during the baseline, so each mutant only runs the tests that reach it. | coverage, per-test coverage, coverage analysis | Code: `ReachMap` |
-| **Outcome** | What happened to a mutant: one of caught, missed, timeout, unviable, equivalent, not reached, skipped. | status, result, verdict | Code: `Outcome` |
-| **Caught** | A test failed with the mutant in place. | killed, detected | The research and Stryker say "killed" |
-| **Missed** | Every test that reaches the mutant passed: the code could be wrong in this way and no test would notice. | survived, survivor, live, alive, uncaught | The research says "live" or "survived". A missed mutant is "a survivor" in the research too; use "missed mutant" |
+| **Outcome** | What happened to a mutant: one of killed, survived, timeout, compile error, runtime error, equivalent, no coverage, ignored. | status, result, verdict | Code: `Outcome`. The names are the statuses of Stryker's mutation-testing-elements report schema, which vile writes, plus "equivalent" from the research |
+| **Killed** | A test failed with the mutant in place. | caught, detected | The research's, PIT's and Stryker's term. cargo-mutants says "caught" |
+| **Survived** | Every test that reaches the mutant passed: the code could be wrong in this way and no test would notice. Such a mutant is a survivor. | missed, live, alive, uncaught, not killed | PIT's and Stryker's term. The research also says "live"; cargo-mutants says "missed" |
 | **Timeout** | The tests ran past the time limit with the mutant in place and were stopped. Often a loop that never ends. | hang, hung, timed out | |
-| **Unviable** | The mutant doesn't type-check, so its tests never run. | invalid, compile error, stillborn | cargo-mutants' word. Stryker says "compile error" |
-| **Equivalent** | The mutant can't change what the program does, so no test could catch it. vile finds some of them by comparing minified code. | redundant (for this meaning), no-op | "Equivalent mutant" is the research's term |
+| **Compile error** | The mutant doesn't type-check, so its tests never run. vile checks with tsrs. | unviable, invalid, stillborn, type error | The schema's `CompileError`. cargo-mutants says "unviable"; the research sometimes "stillborn" |
+| **Runtime error** | The mutant broke something other than a test: the module failed to load, or the test run itself crashed. | crash, error, broken | The schema's `RuntimeError` |
+| **Equivalent** | The mutant can't change what the program does, so no test could kill it. vile finds some of them by comparing minified code. | redundant (for this meaning), no-op | "Equivalent mutant" is the research's term. The schema has no status for it, so the report writes it as ignored, with the reason |
 | **Duplicate** | Two mutants that change the program in the same way. One of them runs. | redundant, same mutant | |
-| **Not reached** | No test runs the mutant's site. It's untested code rather than a weak test. | no coverage, uncovered | Stryker says "no coverage" |
-| **Skipped** | A disable comment or an arid rule kept the site from being mutated. | ignored, excluded, filtered | |
+| **No coverage** | No test runs the mutant's site. It's untested code rather than a weak test. | not reached, uncovered | The schema's `NoCoverage` |
+| **Ignored** | A disable comment or an arid rule kept the site from being tested. | skipped, excluded, filtered | The schema's `Ignored` |
 | **Arid** | Code whose mutants aren't worth a test, such as logging, so it's never mutated. | uninteresting, noise, trivial | From Google's "arid nodes" (Petrović et al.) |
 | **Productive** | A mutant worth seeing: a test for it would improve the tests, or it shows a bug. | useful, interesting, valuable | Google's term. Its opposite is unproductive |
-| **Mutation score** | Caught and timed-out mutants as a share of those that were caught, timed out, missed or not reached. Unviable, equivalent and skipped mutants don't count. | kill rate, mutation coverage, score | The same definition as Stryker's. It isn't comparable between tools or projects |
+| **Mutation score** | Killed and timed-out mutants as a share of those that were killed, timed out, survived or had no coverage. Compile errors, runtime errors, equivalent and ignored mutants don't count. | kill rate, mutation coverage, score | The same definition as Stryker's. It isn't comparable between tools or projects |

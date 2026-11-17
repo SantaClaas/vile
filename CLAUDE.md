@@ -5,7 +5,7 @@ Mutation testing for TypeScript and JavaScript, built on Oxc, tsrs and Vitest. I
 ## Where things are
 
 - [`docs/PLAN.md`](docs/PLAN.md): the plan, from the architecture and the operators to the phases and how the work is split onto subagents. Read it before starting any work, and keep it current when a decision changes.
-- [`docs/GLOSSARY.md`](docs/GLOSSARY.md): the words for things, which load in every session. "Caught" and "missed", never "killed" and "survived", except when quoting the research.
+- [`docs/GLOSSARY.md`](docs/GLOSSARY.md): the words for things, which load in every session. vile uses the standard names: "killed" and "survived", as in the research, PIT, Stryker and the report schema vile writes.
 - [`docs/guidelines/`](docs/guidelines/): how code is named, split, styled and checked, one file per kind of code, listed in [`docs/CODING-GUIDELINES.md`](docs/CODING-GUIDELINES.md). `principles.md` always applies, including what a tool needs that an app doesn't; the others load by themselves when you touch matching files, through [`.claude/rules/`](.claude/rules/). Read the one for the code you're about to write before planning it.
 - [`README.md`](README.md): what vile is, its license and its credits. Credit every project and paper vile takes from.
 - **Future work: [#1](https://github.com/SantaClaas/vile/issues/1)**, ideas left for after version 1.

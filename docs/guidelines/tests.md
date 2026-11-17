@@ -13,9 +13,9 @@ What gets a test and how the tests run. It adds to [`docs/guidelines/principles.
 
 **Unit tests** sit next to the code they test: `*.test.ts` beside a TypeScript module, run by Vitest (`pnpm test`), and a `tests` module at the end of a Rust file, run by `cargo test` (see [`docs/guidelines/rust.md`](rust.md)). The pure core is most of vile, so most tests are input and expected output, with no setup.
 
-**Fixture projects are the acceptance tests.** Each project in `fixtures/` is a small TypeScript project with Vitest tests, written to produce known outcomes: a mutant its tests catch, one they miss, one that doesn't type-check, one that's equivalent, one that hangs. Each lists the outcome it expects for every mutant. Every stage is tested against them, from generating mutants to the report, and a change that changes an outcome shows up as a diff in review.
+**Fixture projects are the acceptance tests.** Each project in `fixtures/` is a small TypeScript project with Vitest tests, written to produce known outcomes: a mutant its tests kill, one that survives, one that doesn't type-check, one that's equivalent, one that hangs. Each lists the outcome it expects for every mutant. Every stage is tested against them, from generating mutants to the report, and a change that changes an outcome shows up as a diff in review.
 
-- **A new operator, outcome or skip rule gets a fixture case** that shows it: the code it applies to, and a test that catches it or deliberately doesn't.
+- **A new operator, outcome or skip rule gets a fixture case** that shows it: the code it applies to, and a test that kills it or deliberately doesn't.
 - **A fixture's code is written for the case it shows,** not taken from real projects, so it stays small enough to read in one go.
 
 **Output is tested by snapshot.** The terminal output and the JSON in `vile.out/` are compared with a stored copy, so a change shows up as a diff in review. A change to the JSON is a change to the interface (see [A tool, not an app](principles.md#a-tool-not-an-app)).

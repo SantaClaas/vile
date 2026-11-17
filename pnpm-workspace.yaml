@@ -1,0 +1,38 @@
+# pnpm settings, strict on purpose to keep compromised or broken packages out
+# (https://pnpm.io/supply-chain-security).
+
+packages:
+  - "packages/*"
+
+# Waits a week after a version is published before installing it, like Dependabot's cooldown for
+# the actions, so a bad release has time to be found and pulled. It applies to every dependency,
+# transitive ones included, and pnpm checks the lockfile against it on every install, not only when
+# it picks a new version.
+#
+# pnpm's own version, pinned with its hash in package.json's packageManager, isn't held to this:
+# the lockfile check passes a pnpm release of any age. The week applies to it by hand instead.
+minimumReleaseAge: 10080
+# Fails instead of falling back to a younger version when nothing in range is old enough.
+minimumReleaseAgeStrict: true
+# Fails on a package whose release date the registry doesn't report, instead of skipping the check.
+minimumReleaseAgeIgnoreMissingTime: false
+
+# Fails when a version has weaker trust evidence (trusted publishing, provenance) than an earlier
+# release of the same package, a sign that someone else published it.
+trustPolicy: no-downgrade
+
+# Only the dependencies in package.json may come from git or a tarball URL, never transitive ones.
+blockExoticSubdeps: true
+
+# Dependencies may only run install scripts when they are listed here, and an install fails on any
+# unlisted one.
+strictDepBuilds: true
+
+# Fails when a dependency says it doesn't support the Node version in use.
+engineStrict: true
+
+# Saves exact versions, never ranges.
+savePrefix: ""
+
+# Fails instead of downloading another pnpm when the running one isn't the packageManager version.
+pmOnFail: error

@@ -1,0 +1,71 @@
+name: Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Every action is pinned to a commit hash, with its version in a comment at the end of the line, so
+# a moved tag can't change what runs. zizmor checks both the pin and that the hash is the version in
+# the comment (see .github/zizmor.yml), and Dependabot updates them together.
+
+jobs:
+  workflows:
+    name: Lint the workflows
+    runs-on: ubuntu-latest
+    # Stops a job that hangs, instead of GitHub's six hours. It takes under a minute today.
+    timeout-minutes: 10
+    permissions:
+      contents: read # Reads the repository to lint its workflows.
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # actionlint 1.7.12
+      - name: Run actionlint
+        run: >
+          docker run --rm --volume "$PWD:/repo" --workdir /repo
+          rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667
+          -color
+      - uses: zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd # v0.8.1
+        with:
+          version: 1.31.1
+          persona: pedantic
+          advanced-security: false
+          annotations: true
+          config: .github/zizmor.yml
+
+  typescript:
+    name: Check the TypeScript and the docs
+    runs-on: ubuntu-latest
+    # Stops a job that hangs, instead of GitHub's six hours. It takes about a minute today.
+    timeout-minutes: 10
+    permissions:
+      contents: read # Reads the repository to check it.
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          check-latest: true
+          # A cache that a pull request could fill must not reach what gets released.
+          cache: ${{ github.event_name == 'pull_request' && 'pnpm' || '' }}
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm knip
+      - uses: crate-ci/typos@4c8b7f51ca60df14e3c5ca82770dfbbe6c3dae85 # v1.52.0
+      - run: pnpm test
+      - run: pnpm links

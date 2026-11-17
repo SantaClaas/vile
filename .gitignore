@@ -1,0 +1,9 @@
+node_modules/
+target/
+vile.out/
+vile.out.old/
+*.log
+.DS_Store
+.env
+.env.*
+.cache/

@@ -12,9 +12,9 @@ repository = "https://github.com/SantaClaas/vile"
 publish = false
 
 [workspace.dependencies]
-# Pinned exactly, as every dependency here: a version is picked a week or more after its release,
-# like the npm packages (see Sources in docs/guidelines/rust.md), and Dependabot proposes updates
-# with the same wait.
+# Pinned exactly, as every dependency here. .cargo/config.toml makes Cargo pick only versions that
+# are a week old or more, as pnpm-workspace.yaml does for npm, and Dependabot proposes updates
+# with the same wait (see The workspace in docs/guidelines/rust.md).
 serde = { version = "=1.0.229", features = ["derive"] }
 serde_json = "=1.0.154"
 
@@ -24,6 +24,12 @@ serde_json = "=1.0.154"
 unsafe_code = "forbid"
 missing_debug_implementations = "warn"
 unreachable_pub = "warn"
+
+# A dependency nothing uses fails the build, as unused code does (new in Cargo 1.100, where it's a
+# warning by default). It only fires when every target that may use the dependency is built, so CI
+# runs clippy with --all-targets.
+[workspace.lints.cargo]
+unused_dependencies = "deny"
 
 [workspace.lints.clippy]
 all = { level = "deny", priority = -1 }

@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/*"]
+members = ["crates/*", "spikes/*"]
 
 [workspace.package]
 version = "0.0.0"
@@ -18,6 +18,13 @@ publish = false
 serde = { version = "=1.0.229", features = ["derive"] }
 serde_json = "=1.0.154"
 thiserror = "=2.0.21"
+# Oxc breaks its API in minor releases, so all its crates move together, to one exact version.
+oxc_allocator = "=0.158.0"
+oxc_ast = "=0.158.0"
+oxc_ast_visit = "=0.158.0"
+oxc_parser = "=0.158.0"
+oxc_span = "=0.158.0"
+oxc_syntax = "=0.158.0"
 
 # Strict on purpose, after Oxc and tsrs (see Checks in docs/guidelines/rust.md). An exception is
 # #[expect(clippy::lint, reason = "...")] on the smallest item it covers; #[allow] isn't allowed.

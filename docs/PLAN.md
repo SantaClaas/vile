@@ -93,7 +93,7 @@ Start small (selective mutation, Offutt et al.). Every operator has to earn its 
 6. **Statement block removal** (Google's SBR): empty a block that isn't a function body.
 7. **TypeScript and JavaScript specific, after measuring:** `?.` → `.` (tsrs rejects most), a ternary to either branch, `some` ↔ `every`, removing a `filter` call.
 
-Left out at first: string literal changes, the mutation of numeric literals in constants, and turning a `Result`-like return into its other variant. They're collected in [Future work (#1)](https://github.com/SantaClaas/vile/issues/1), with posting survivors as pull request review comments. Google found ABS insertion mostly unproductive.
+Left out at first: string literal changes, the mutation of numeric literals in constants, and turning a `Result`-like return into its other variant. They're collected in the future work in [#1](https://github.com/SantaClaas/vile/issues/1), with posting survivors as pull request review comments. Google found ABS insertion mostly unproductive.
 
 ## Noise control
 
@@ -155,6 +155,8 @@ Google's paper says "we generate at most a single mutant in a line" and gives no
 - **License checks:** `cargo-deny` (licenses, sources, advisories) and generated third-party notices (`cargo-about`) in CI, so the notices can't drift from `Cargo.lock`.
 
 ## Phases and the split onto subagents
+
+Progress is tracked in [#1](https://github.com/SantaClaas/vile/issues/1), with each piece of work as a sub-issue.
 
 Bottom-up: one working vertical slice first, then parallel work on the pieces it proved.
 

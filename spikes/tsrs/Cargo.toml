@@ -1,0 +1,15 @@
+[package]
+name = "vile_spike_tsrs"
+description = "Spike: tsrs as a Rust library (#13)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+tsrs_project.workspace = true
+
+[lints]
+workspace = true

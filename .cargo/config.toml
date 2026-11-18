@@ -1,15 +1,6 @@
-# Cargo settings for everyone working on vile, and for CI.
-
-# Waits a week after a version is published before Cargo picks it, like pnpm-workspace.yaml's
-# minimumReleaseAge for npm and Dependabot's cooldown, so a bad release has time to be found and
-# pulled (Cargo 1.100's min-publish-age). It applies when Cargo resolves versions (cargo update,
-# generate-lockfile, adding a dependency); versions already in Cargo.lock stay. To take a younger
-# release on purpose, for a security fix say, run that one update with
-# CARGO_RESOLVER_INCOMPATIBLE_PUBLISH_AGE=allow and say why in the commit. cargo install ignores
-# the setting, so pin what you install: cargo install foo@1.2.3.
+# Only picks versions a week old or more, like pnpm-workspace.yaml (see docs/guidelines/rust.md).
 [registry]
 global-min-publish-age = "7 days"
 
 [resolver]
-# Already Cargo's behavior once an age is set; written out so it can't change under us.
 incompatible-publish-age = "deny"

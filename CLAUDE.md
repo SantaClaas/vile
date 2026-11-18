@@ -8,7 +8,7 @@ Mutation testing for TypeScript and JavaScript, built on Oxc, tsrs and Vitest. I
 - [`docs/GLOSSARY.md`](docs/GLOSSARY.md): the words for things, which load in every session. vile uses the standard names: "killed" and "survived", as in the research, PIT, Stryker and the report schema vile writes.
 - [`docs/guidelines/`](docs/guidelines/): how code is named, split, styled and checked, one file per kind of code, listed in [`docs/CODING-GUIDELINES.md`](docs/CODING-GUIDELINES.md). `principles.md` always applies, including what a tool needs that an app doesn't; the others load by themselves when you touch matching files, through [`.claude/rules/`](.claude/rules/). Read the one for the code you're about to write before planning it.
 - [`README.md`](README.md): what vile is, its license and its credits. Credit every project and paper vile takes from.
-- **Future work: [#1](https://github.com/SantaClaas/vile/issues/1)**, ideas left for after version 1.
+- **Tracking: [#1](https://github.com/SantaClaas/vile/issues/1)**, where vile stands: the phases, each piece of work as a sub-issue, findings and future work. Rough findings are noted there as checklist items or comments; move comments into the checklist first. When asked to go through them, turn each plain-text item into a sub-issue of #1 (`parent_issue_number`) saying what's wrong, where in the code and what done looks like, and replace the item with its reference (`- [ ] #123`). If an issue already exists, add the note there and point the item to it. Cross out a finding that isn't a problem, tick it and give the reason (`- [x] ~~note~~ (why)`). Keep #1 open.
 
 ## Stack
 

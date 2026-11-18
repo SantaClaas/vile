@@ -13,12 +13,12 @@ use crate::{operator::Operator, patch::Patch, span::Location};
 /// the names of the functions around it, the text it replaces (hashed), the operator, the
 /// replacement, and which occurrence of that text it is within the function, for the rare function
 /// that has the same text twice.
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct MutantId(String);
 
 /// What a [`MutantId`] is made of.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug)]
 pub struct Identity<'a> {
     /// The file's path from the project's root, with `/` between folders on every platform.
     pub file: &'a str,

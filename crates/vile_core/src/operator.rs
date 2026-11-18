@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 /// The names are part of vile's interface: they appear in
 /// disable comments (`vile-disable-next-line relational -- why`), in the config and in the JSON,
 /// so renaming one is a breaking change.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Operator {
     /// Replaces a function's body with a value of its return type (cargo-mutants' `FnValue`,

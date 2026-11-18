@@ -9,7 +9,7 @@ use crate::span::Span;
 ///
 /// vile applies mutants as patches to the text, never by printing a changed syntax tree,
 /// so formatting, comments and line numbers stay as they were (as in cargo-mutants).
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Patch {
     pub span: Span,
     pub replacement: String,

@@ -1,8 +1,9 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
   // Finds unused files, exports and dependencies (https://knip.dev). Its plugins read the entry
-  // points from the Vitest and oxlint configs; the scripts are run by hand or by CI.
-  "entry": ["scripts/*.ts"],
+  // points from the Vitest and oxlint configs; the scripts and the spike's runner are run by hand
+  // or by CI.
+  "entry": ["scripts/*.ts", "spikes/slice/runner/run.ts", "spikes/slice/runner/compare.ts"],
   // The fixture projects are inputs for vile, which runs them; nothing imports them.
   "ignore": ["fixtures/*/**"],
 }

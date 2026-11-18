@@ -27,5 +27,11 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["vitest.config.ts", "scripts", "oxlint-plugins", "fixtures/expected.test.ts"]
+  "include": [
+    "vitest.config.ts",
+    "scripts",
+    "oxlint-plugins",
+    "fixtures/expected.test.ts",
+    "spikes/slice/runner"
+  ]
 }

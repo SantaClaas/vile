@@ -7,6 +7,7 @@ export default defineConfig({
       "scripts/**/*.test.ts",
       "oxlint-plugins/**/*.test.ts",
       "packages/*/src/**/*.test.ts",
+      "spikes/*/runner/**/*.test.ts",
       // The fixtures' own tests must pass unmutated, as vile's baseline needs (see fixtures/README.md).
       "fixtures/**/*.test.ts",
     ],

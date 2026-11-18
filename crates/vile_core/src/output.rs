@@ -79,7 +79,7 @@ mod tests {
         operator::Operator,
         outcome::Outcome,
         patch::Patch,
-        span::{Location, Span},
+        span::{Position, Range, Span},
     };
 
     fn mutant() -> Mutant {
@@ -101,9 +101,15 @@ mod tests {
                 span: Span::new(40, 41).expect("the span isn't reversed"),
                 replacement: "<=".to_owned(),
             },
-            location: Location {
-                line: 3,
-                column: 12,
+            range: Range {
+                start: Position {
+                    line: 3,
+                    column: 12,
+                },
+                end: Position {
+                    line: 3,
+                    column: 13,
+                },
             },
         }
     }
@@ -123,7 +129,10 @@ mod tests {
                     "operator": "relational",
                     "original": "<",
                     "patch": { "span": { "start": 40, "end": 41 }, "replacement": "<=" },
-                    "location": { "line": 3, "column": 12 }
+                    "range": {
+                        "start": { "line": 3, "column": 12 },
+                        "end": { "line": 3, "column": 13 }
+                    }
                 }]
             })
         );

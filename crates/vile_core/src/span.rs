@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// `start` is the first byte, `end` the one after the last. Oxc's spans and tsrs's positions count the same way, so a span
 /// from one means the same text in the other.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Span {
     pub start: u32,
     pub end: u32,
@@ -14,7 +14,7 @@ pub struct Span {
 
 /// A position for people: the line and the column, both counted from 1, the column in characters
 /// (Unicode scalar values) the way editors count them.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Location {
     pub line: u32,
     pub column: u32,

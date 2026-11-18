@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 /// The names are the statuses of Stryker's mutation-testing-elements report schema, the standard
 /// words of the research and PIT, plus "equivalent" from the research. They're part of vile's
 /// interface: they appear in the JSON, and the exit codes depend on them.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Outcome {
     /// A test failed with the mutant in place.

@@ -187,7 +187,7 @@ The main session reviews both and adjusts the contracts.
 | **D schemata** | `crates/vile_schemata`: one module per file with switches, reach counters and source maps, through Oxc's transformer | A's mutants | Every operator gives the same result as schema and as patched text |
 | **E runner** | `packages/vitest`: baseline, reach map, scheduling, timeouts and kills, shards, Ctrl-C | D | Hangs end as timeouts. A killed worker doesn't break the run. Results match S1 |
 | **F report** | `crates/vile_report`: `vile.out`, Oxc diagnostics output, mutation-testing-elements JSON, `--list`, `--in-diff`, `--iterate`, exit codes, review-mode grouping | contracts | Snapshot tests of the output on fixtures |
-| **G packaging** | `crates/vile_napi`, npm packages per platform, release CI, notices bundled | D, F | `pnpm add -D` works on Linux, macOS and Windows. The tsrs `NOTICE` is in the package |
+| **G packaging** | `crates/vile_napi`, npm packages per platform, release CI, notices bundled | D, F | `pnpm add -D` works on Linux, macOS and Windows. The tsrs `NOTICE` is in the package. The release profile (LTO, codegen units) is chosen by measuring the binary's size and speed |
 
 Each agent works in its own worktree and branch and touches only its directory. **Pull requests stay small:** one per workstream at most, and a workstream that grows splits into several (for example one per operator family), each reviewable on its own. Merging is the maintainer's; agents don't merge. The contracts change only through the main session, in their own pull requests.
 

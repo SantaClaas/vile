@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 /// the same way, so a span from one means the same text in the other. The fields are private so
 /// that every span, read from JSON too, starts at or before its end.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(try_from = "Range")]
+#[serde(try_from = "UncheckedSpan")]
 pub struct Span {
     start: u32,
     end: u32,
@@ -16,7 +16,7 @@ pub struct Span {
 
 /// A span as the JSON writes it, before it's checked.
 #[derive(Deserialize)]
-struct Range {
+struct UncheckedSpan {
     start: u32,
     end: u32,
 }
@@ -28,20 +28,40 @@ pub enum SpanError {
     Reversed,
 }
 
-impl TryFrom<Range> for Span {
+impl TryFrom<UncheckedSpan> for Span {
     type Error = SpanError;
 
-    fn try_from(range: Range) -> Result<Self, Self::Error> {
-        Self::new(range.start, range.end)
+    fn try_from(span: UncheckedSpan) -> Result<Self, Self::Error> {
+        Self::new(span.start, span.end)
     }
 }
 
-/// A position for people: the line and the column, both counted from 1, the column in characters
-/// (Unicode scalar values) the way editors count them.
+/// A line and a column, both counted from 1. Columns count UTF-16 code units, as the
+/// mutation-testing-elements report, editors (LSP) and SARIF do by default.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Location {
+pub struct Position {
     pub line: u32,
     pub column: u32,
+}
+
+/// Where a span is, for people: its start and its end, which is exclusive. The report schema calls
+/// this a location.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Range {
+    pub start: Position,
+    pub end: Position,
+}
+
+/// The position of a byte offset, or `None` when it isn't a character boundary of the source.
+fn find_position(source: &str, offset: u32) -> Option<Position> {
+    let before = source.get(..usize::try_from(offset).ok()?)?;
+    let line_start = before.rfind('\n').map_or(0, |newline| newline + 1);
+    let line = before.matches('\n').count() + 1;
+    let column = before[line_start..].encode_utf16().count() + 1;
+    Some(Position {
+        line: u32::try_from(line).ok()?,
+        column: u32::try_from(column).ok()?,
+    })
 }
 
 impl Span {
@@ -74,24 +94,20 @@ impl Span {
         source.get(usize::try_from(self.start).ok()?..usize::try_from(self.end).ok()?)
     }
 
-    /// Where the span starts, as a line and column, or `None` when the start isn't a character
-    /// boundary of the source.
+    /// Where the span starts and ends, or `None` when either end isn't a character boundary of
+    /// the source.
     #[must_use]
-    pub fn locate(self, source: &str) -> Option<Location> {
-        let before = source.get(..usize::try_from(self.start).ok()?)?;
-        let line_start = before.rfind('\n').map_or(0, |newline| newline + 1);
-        let line = before.matches('\n').count() + 1;
-        let column = before[line_start..].chars().count() + 1;
-        Some(Location {
-            line: u32::try_from(line).ok()?,
-            column: u32::try_from(column).ok()?,
+    pub fn locate(self, source: &str) -> Option<Range> {
+        Some(Range {
+            start: find_position(source, self.start)?,
+            end: find_position(source, self.end)?,
         })
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{Location, Span, SpanError};
+    use super::{Position, Range, Span, SpanError};
 
     fn span(start: u32, end: u32) -> Span {
         Span::new(start, end).expect("the test's span isn't reversed")
@@ -128,21 +144,55 @@ mod tests {
         assert_eq!(span(1, 1).locate("ä"), None);
     }
 
+    fn position(line: u32, column: u32) -> Position {
+        Position { line, column }
+    }
+
     #[test]
-    fn locates_lines_and_columns_from_one_counting_characters() {
-        let source = "let a = 1;\nlet ä = a < 2;";
-        // The "<" on the second line: "let ä = a " is 10 characters but 11 bytes.
+    fn locates_both_ends_from_one() {
+        let source = "let a = 1;\nlet b = a < 2;";
         let start = u32::try_from(source.find('<').expect("the source has a <")).expect("it fits");
         assert_eq!(
             span(start, start + 1).locate(source),
-            Some(Location {
-                line: 2,
-                column: 11
+            Some(Range {
+                start: position(2, 11),
+                end: position(2, 12),
             })
         );
         assert_eq!(
-            span(0, 0).locate(source),
-            Some(Location { line: 1, column: 1 })
+            span(0, 3).locate(source),
+            Some(Range {
+                start: position(1, 1),
+                end: position(1, 4),
+            })
+        );
+    }
+
+    #[test]
+    fn locates_a_span_across_lines() {
+        let source = "if (a) {\n  b();\n}";
+        let start = u32::try_from(source.find('{').expect("the source has a {")).expect("it fits");
+        let end = u32::try_from(source.len()).expect("it fits");
+        assert_eq!(
+            span(start, end).locate(source),
+            Some(Range {
+                start: position(1, 8),
+                end: position(3, 2),
+            })
+        );
+    }
+
+    #[test]
+    fn counts_columns_in_utf_16_code_units() {
+        // "ä" is one UTF-16 unit and two bytes; "😀" is two UTF-16 units and four bytes.
+        let source = "ä😀 < b";
+        let start = u32::try_from(source.find('<').expect("the source has a <")).expect("it fits");
+        assert_eq!(
+            span(start, start + 1).locate(source),
+            Some(Range {
+                start: position(1, 5),
+                end: position(1, 6),
+            })
         );
     }
 }

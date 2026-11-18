@@ -4,7 +4,7 @@ use std::fmt;
 
 use serde::{Deserialize, Serialize};
 
-use crate::{operator::Operator, patch::Patch, span::Location};
+use crate::{operator::Operator, patch::Patch, span::Range};
 
 /// A mutant's identity, the same from run to run as long as the code it changes stays the same.
 ///
@@ -75,8 +75,8 @@ pub struct Mutant {
     /// The text the patch replaces, so a report can show the change without the source.
     pub original: String,
     pub patch: Patch,
-    /// Where the patch starts, for people. The patch's span is what programs use.
-    pub location: Location,
+    /// Where the patch is, for people. The patch's span is what programs use.
+    pub range: Range,
 }
 
 #[cfg(test)]

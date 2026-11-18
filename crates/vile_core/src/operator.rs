@@ -63,6 +63,24 @@ impl Operator {
 mod tests {
     use super::Operator;
 
+    /// The names are an interface (see the type's comment), so they're written out here: renaming
+    /// one fails this test, and the change needs a major version and a line in the changelog.
+    #[test]
+    fn keeps_the_names_users_write() {
+        let names = Operator::ALL.map(Operator::name);
+        assert_eq!(
+            names,
+            [
+                "body-replacement",
+                "relational",
+                "logical",
+                "arithmetic",
+                "unary",
+                "block-removal",
+            ]
+        );
+    }
+
     #[test]
     fn reads_back_every_name_it_writes() {
         for operator in Operator::ALL {

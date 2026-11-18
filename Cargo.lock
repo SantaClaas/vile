@@ -889,7 +889,18 @@ dependencies = [
 name = "vile_spike_tsrs"
 version = "0.0.0"
 dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tsrs_ast",
+ "tsrs_compiler",
+ "tsrs_core",
+ "tsrs_lsproto",
  "tsrs_project",
+ "tsrs_scanner",
+ "tsrs_tsoptions",
+ "tsrs_vfs",
+ "vile_core",
 ]
 
 [[package]]

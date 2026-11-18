@@ -52,7 +52,3 @@ print_stderr = "deny"
 # The crates aren't published yet, so they have no crates.io metadata to check. Turned back on
 # with the first release.
 cargo_common_metadata = "allow"
-
-[profile.release]
-lto = "fat"
-codegen-units = 1

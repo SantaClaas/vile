@@ -16,9 +16,9 @@ pub struct Patch {
 }
 
 /// Why a patch doesn't fit a source.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, thiserror::Error)]
 pub enum PatchError {
-    /// The span reaches past the end of the source, or cuts a character in half.
+    #[error("the patch's span reaches past the end of the source or cuts a character in half")]
     OutsideSource,
 }
 

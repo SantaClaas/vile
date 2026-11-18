@@ -22,16 +22,10 @@ struct Range {
 }
 
 /// Why a span can't be made.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, thiserror::Error)]
 pub enum SpanError {
-    /// The end comes before the start.
+    #[error("the span's end comes before its start")]
     Reversed,
-}
-
-impl std::fmt::Display for SpanError {
-    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        formatter.write_str("a span's end comes before its start")
-    }
 }
 
 impl TryFrom<Range> for Span {

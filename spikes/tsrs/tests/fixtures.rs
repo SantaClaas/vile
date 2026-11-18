@@ -114,7 +114,12 @@ fn checks_unchanged_files_without_diagnostics() {
             span: Span::new(0, 0).unwrap(),
             replacement: String::new(),
         };
-        for file in project.file_names() {
+        // vile never mutates test files, and their imports need node_modules.
+        for file in project
+            .file_names()
+            .into_iter()
+            .filter(|file| !file.ends_with(".test.ts"))
+        {
             let checked = project.check(&file, &unchanged).unwrap();
             assert_eq!(checked.diagnostics, [], "{file}");
             assert!(checked.is_reused, "{file}");

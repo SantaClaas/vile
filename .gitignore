@@ -7,3 +7,4 @@ vile.out.old/
 .env
 .env.*
 .cache/
+*.tsbuildinfo

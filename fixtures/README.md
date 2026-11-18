@@ -4,9 +4,9 @@ Small TypeScript projects with Vitest tests, written to give known outcomes. The
 
 | Fixture | Shows |
 | --- | --- |
-| [`operators/`](operators/) | Relational, logical, arithmetic, unary and block removal mutants: caught, missed (a boundary no test checks, an operation the tests can't tell apart, and one equivalent only by reasoning), and unviable (dropping `?? name` breaks the return type) |
-| [`body-replacement/`](body-replacement/) | Function bodies replaced with values of their return type: caught, missed (a side effect no test looks at), timeout (a loop guard that never ends the loop) and unviable (a branded return type) |
-| [`filtering/`](filtering/) | Mutants filtered before any test runs: arid (a console call's arguments), equivalent (in a block the minifier removes), skipped (a disable comment) and not reached (a function no test calls) |
+| [`operators/`](operators/) | Relational, logical, arithmetic, unary and block removal mutants: killed, survived (a boundary no test checks, an operation the tests can't tell apart, and one equivalent only by reasoning), and a compile error (dropping `?? name` breaks the return type) |
+| [`body-replacement/`](body-replacement/) | Function bodies replaced with values of their return type: killed, survived (a side effect no test looks at), timeout (a loop guard that never ends the loop) and compile errors (a branded return type) |
+| [`filtering/`](filtering/) | Mutants filtered before any test runs: arid (a console call's arguments), equivalent (in a block the minifier removes), ignored (a disable comment) and no coverage (a function no test calls) |
 
 ## `expected.json`
 
@@ -16,7 +16,7 @@ Each fixture lists the operators it runs with and every mutant vile should make 
 {
   "operators": ["relational"],
   "mutants": [
-    { "file": "src/range.ts", "line": 4, "operator": "relational", "original": "<", "replacement": "!==", "outcome": "missed", "note": "no test has a value above the maximum" }
+    { "file": "src/range.ts", "line": 4, "operator": "relational", "original": "<", "replacement": "!==", "outcome": "survived", "note": "no test has a value above the maximum" }
   ]
 }
 ```
@@ -44,4 +44,4 @@ These are the conventions the generator follows, which the expectations rely on:
 
 [`expected.test.ts`](expected.test.ts) checks that each `original` is on the line it names and that every operator and outcome is one vile knows, so an edit to a fixture can't leave its expectations behind. The fixtures' own tests run with `pnpm test`, and their type check with `pnpm typecheck`: they must pass unmutated, as vile's baseline needs.
 
-The outcomes of caught, missed, timeout and unviable mutants were checked by hand when the fixtures were written, by applying each patch and running the tests or the type check. Skipped, equivalent and not reached depend on vile's own filtering, so the stages that do it check those.
+The outcomes of killed, survived, timed-out and compile-error mutants were checked by hand when the fixtures were written, by applying each patch and running the tests or the type check. Ignored, equivalent and no-coverage mutants depend on vile's own filtering, so the stages that do it check those.

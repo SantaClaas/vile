@@ -11,7 +11,7 @@ export function findName(names: readonly string[], prefix: string): string | und
   return names.find((name) => name.startsWith(prefix));
 }
 
-// No test looks at the log, so emptying the body is missed: the side effect goes unobserved.
+// No test looks at the log, so emptying the body survives: the side effect goes unobserved.
 export function record(log: string[], entry: string): void {
   log.push(entry);
 }

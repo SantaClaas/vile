@@ -8,7 +8,7 @@
       "operator": "arithmetic",
       "original": "+",
       "replacement": "-",
-      "outcome": "skipped",
+      "outcome": "ignored",
       "note": "arid: an argument of a console call"
     },
     {
@@ -26,7 +26,7 @@
       "operator": "arithmetic",
       "original": "+",
       "replacement": "-",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/total.ts",
@@ -34,7 +34,7 @@
       "operator": "relational",
       "original": ">=",
       "replacement": ">",
-      "outcome": "skipped",
+      "outcome": "ignored",
       "note": "disable comment"
     },
     {
@@ -43,7 +43,7 @@
       "operator": "relational",
       "original": ">=",
       "replacement": "===",
-      "outcome": "skipped"
+      "outcome": "ignored"
     },
     {
       "file": "src/total.ts",
@@ -51,7 +51,7 @@
       "operator": "relational",
       "original": "age >= 18",
       "replacement": "true",
-      "outcome": "skipped"
+      "outcome": "ignored"
     },
     {
       "file": "src/total.ts",
@@ -59,7 +59,7 @@
       "operator": "relational",
       "original": "<",
       "replacement": "<=",
-      "outcome": "not-reached",
+      "outcome": "no-coverage",
       "note": "no test calls isBefore"
     },
     {
@@ -68,7 +68,7 @@
       "operator": "relational",
       "original": "<",
       "replacement": "!==",
-      "outcome": "not-reached"
+      "outcome": "no-coverage"
     },
     {
       "file": "src/total.ts",
@@ -76,7 +76,7 @@
       "operator": "relational",
       "original": "a < b",
       "replacement": "false",
-      "outcome": "not-reached"
+      "outcome": "no-coverage"
     }
   ]
 }

@@ -7,49 +7,49 @@
       "line": 2,
       "operator": "body-replacement",
       "replacement": "{ return \"\"; }",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/value.ts",
       "line": 2,
       "operator": "body-replacement",
       "replacement": "{ return \"xyzzy\"; }",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/value.ts",
       "line": 6,
       "operator": "body-replacement",
       "replacement": "{ return []; }",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/value.ts",
       "line": 10,
       "operator": "body-replacement",
       "replacement": "{ return undefined; }",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/value.ts",
       "line": 10,
       "operator": "body-replacement",
       "replacement": "{ return \"\"; }",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/value.ts",
       "line": 10,
       "operator": "body-replacement",
       "replacement": "{ return \"xyzzy\"; }",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/value.ts",
       "line": 15,
       "operator": "body-replacement",
       "replacement": "{}",
-      "outcome": "missed",
+      "outcome": "survived",
       "note": "no test looks at the log"
     },
     {
@@ -57,7 +57,7 @@
       "line": 2,
       "operator": "body-replacement",
       "replacement": "{ return true; }",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/countdown.ts",
@@ -72,28 +72,28 @@
       "line": 6,
       "operator": "body-replacement",
       "replacement": "{ return 0; }",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/countdown.ts",
       "line": 6,
       "operator": "body-replacement",
       "replacement": "{ return 1; }",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/countdown.ts",
       "line": 6,
       "operator": "body-replacement",
       "replacement": "{ return -1; }",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/cents.ts",
       "line": 4,
       "operator": "body-replacement",
       "replacement": "{ return 0; }",
-      "outcome": "unviable",
+      "outcome": "compile-error",
       "note": "a plain number isn't a Cents"
     },
     {
@@ -101,14 +101,14 @@
       "line": 4,
       "operator": "body-replacement",
       "replacement": "{ return 1; }",
-      "outcome": "unviable"
+      "outcome": "compile-error"
     },
     {
       "file": "src/cents.ts",
       "line": 4,
       "operator": "body-replacement",
       "replacement": "{ return -1; }",
-      "outcome": "unviable"
+      "outcome": "compile-error"
     }
   ]
 }

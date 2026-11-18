@@ -16,13 +16,14 @@ const OPERATORS = new Set([
   "block-removal",
 ]);
 const OUTCOMES = new Set([
-  "caught",
-  "missed",
+  "killed",
+  "survived",
   "timeout",
-  "unviable",
+  "compile-error",
+  "runtime-error",
   "equivalent",
-  "not-reached",
-  "skipped",
+  "no-coverage",
+  "ignored",
 ]);
 
 type ExpectedMutant = {

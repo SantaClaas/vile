@@ -12,14 +12,14 @@ use crate::{
 
 /// The version of the files' shape. It goes up when a field is renamed, removed or means something
 /// else, so a program can refuse a file it doesn't understand. Adding a field doesn't change it.
-pub const FORMAT_VERSION: u32 = 1;
+const FORMAT_VERSION: u32 = 1;
 
 /// `vile.out/mutants.json`: every mutant of the run, written before any test runs.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MutantsFile {
-    pub format_version: u32,
-    pub mutants: Vec<Mutant>,
+    format_version: u32,
+    mutants: Vec<Mutant>,
 }
 
 /// What happened to one mutant: its record in `outcomes.json`.
@@ -34,14 +34,15 @@ pub struct Record {
     pub failed_tests: Vec<String>,
 }
 
-/// `vile.out/outcomes.json`: what happened to each mutant, rewritten as the run goes.
+/// `vile.out/outcomes.json`: what happened to each mutant, rewritten as the run goes. The fields
+/// are private so the summary and score always match the records.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OutcomesFile {
-    pub format_version: u32,
-    pub records: Vec<Record>,
-    pub summary: Summary,
-    pub score: Option<f64>,
+    format_version: u32,
+    records: Vec<Record>,
+    summary: Summary,
+    score: Option<f64>,
 }
 
 impl MutantsFile {
@@ -97,7 +98,7 @@ mod tests {
             operator: Operator::Relational,
             original: "<".to_owned(),
             patch: Patch {
-                span: Span { start: 40, end: 41 },
+                span: Span::new(40, 41).expect("the span isn't reversed"),
                 replacement: "<=".to_owned(),
             },
             location: Location {

@@ -57,12 +57,6 @@ impl MutantId {
             occurrence = identity.occurrence,
         ))
     }
-
-    /// The ID as text, as it appears in the JSON.
-    #[must_use]
-    pub fn as_str(&self) -> &str {
-        &self.0
-    }
 }
 
 impl fmt::Display for MutantId {
@@ -117,7 +111,7 @@ mod tests {
             MutantId::new(&identity(&scope, "<="))
         );
         assert_eq!(
-            MutantId::new(&identity(&scope, "<=")).as_str(),
+            MutantId::new(&identity(&scope, "<=")).to_string(),
             "src/slot.ts:Slot.findFirstFree:relational:af63b14c8601a37b:08098b07b4c86ff2:0"
         );
     }

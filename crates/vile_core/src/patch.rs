@@ -18,7 +18,7 @@ pub struct Patch {
 /// Why a patch doesn't fit a source.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum PatchError {
-    /// The span reaches past the end of the source, is reversed, or cuts a character in half.
+    /// The span reaches past the end of the source, or cuts a character in half.
     OutsideSource,
 }
 
@@ -29,11 +29,8 @@ impl Patch {
     ///
     /// [`PatchError::OutsideSource`] when the span doesn't fit the source.
     pub fn apply(&self, source: &str) -> Result<String, PatchError> {
-        let start = usize::try_from(self.span.start).map_err(|_| PatchError::OutsideSource)?;
-        let end = usize::try_from(self.span.end).map_err(|_| PatchError::OutsideSource)?;
-        if start > end {
-            return Err(PatchError::OutsideSource);
-        }
+        let start = usize::try_from(self.span.start()).map_err(|_| PatchError::OutsideSource)?;
+        let end = usize::try_from(self.span.end()).map_err(|_| PatchError::OutsideSource)?;
         let before = source.get(..start).ok_or(PatchError::OutsideSource)?;
         let after = source.get(end..).ok_or(PatchError::OutsideSource)?;
         Ok([before, &self.replacement, after].concat())
@@ -47,7 +44,7 @@ mod tests {
 
     fn patch(start: u32, end: u32, replacement: &str) -> Patch {
         Patch {
-            span: Span { start, end },
+            span: Span::new(start, end).expect("the test's span isn't reversed"),
             replacement: replacement.to_owned(),
         }
     }
@@ -70,10 +67,6 @@ mod tests {
     fn refuses_a_span_that_doesnt_fit() {
         assert_eq!(
             patch(2, 9, "x").apply("a < b"),
-            Err(PatchError::OutsideSource)
-        );
-        assert_eq!(
-            patch(3, 2, "x").apply("a < b"),
             Err(PatchError::OutsideSource)
         );
         assert_eq!(patch(1, 2, "x").apply("ä"), Err(PatchError::OutsideSource));

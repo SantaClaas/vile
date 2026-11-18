@@ -10,7 +10,17 @@ yanked = "deny"
 [licenses]
 # Permissive licenses only, which vile's own MIT OR Apache-2.0 can include. Each one added later
 # says which crate needs it.
-allow = ["MIT", "Apache-2.0", "Unicode-3.0"]
+allow = [
+  "MIT",
+  "Apache-2.0",
+  "Unicode-3.0",
+  # xxhash-rust; dragonbox_ecma offers it as an alternative. Both come with tsrs.
+  "BSL-1.0",
+  # dragonbox_ecma, with tsrs.
+  "Apache-2.0 WITH LLVM-exception",
+  # unicode-id-start's identifier tables, with tsrs.
+  "Unicode-DFS-2016",
+]
 confidence-threshold = 0.9
 
 [bans]

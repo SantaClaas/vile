@@ -6,4 +6,6 @@ extend-exclude = [
   # Integrity hashes are random letters, so sooner or later one spells a typo.
   "pnpm-lock.yaml",
   "Cargo.lock",
+  # tsrs's notice, copied unchanged; its names aren't typos.
+  "spikes/tsrs/NOTICE",
 ]

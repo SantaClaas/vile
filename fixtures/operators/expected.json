@@ -8,7 +8,7 @@
       "operator": "relational",
       "original": ">=",
       "replacement": ">",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/range.ts",
@@ -16,7 +16,7 @@
       "operator": "relational",
       "original": ">=",
       "replacement": "===",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/range.ts",
@@ -24,7 +24,7 @@
       "operator": "relational",
       "original": "value >= minimum",
       "replacement": "true",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/range.ts",
@@ -32,7 +32,7 @@
       "operator": "logical",
       "original": "&&",
       "replacement": "||",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/range.ts",
@@ -40,7 +40,7 @@
       "operator": "relational",
       "original": "<",
       "replacement": "<=",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/range.ts",
@@ -48,7 +48,7 @@
       "operator": "relational",
       "original": "<",
       "replacement": "!==",
-      "outcome": "missed",
+      "outcome": "survived",
       "note": "no test has a value above the maximum"
     },
     {
@@ -57,7 +57,7 @@
       "operator": "relational",
       "original": "value < maximum",
       "replacement": "false",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/price.ts",
@@ -65,7 +65,7 @@
       "operator": "arithmetic",
       "original": "*",
       "replacement": "/",
-      "outcome": "missed",
+      "outcome": "survived",
       "note": "the only test buys one item"
     },
     {
@@ -74,7 +74,7 @@
       "operator": "arithmetic",
       "original": "-",
       "replacement": "+",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/name.ts",
@@ -82,7 +82,7 @@
       "operator": "unary",
       "original": "!",
       "replacement": "",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/name.ts",
@@ -90,7 +90,7 @@
       "operator": "logical",
       "original": "nickname ?? name",
       "replacement": "nickname",
-      "outcome": "unviable",
+      "outcome": "compile-error",
       "note": "string | undefined isn't a string"
     },
     {
@@ -99,7 +99,7 @@
       "operator": "relational",
       "original": ">",
       "replacement": ">=",
-      "outcome": "missed",
+      "outcome": "survived",
       "note": "equivalent by reasoning, not by minified code"
     },
     {
@@ -108,7 +108,7 @@
       "operator": "relational",
       "original": ">",
       "replacement": "!==",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/clamp.ts",
@@ -116,7 +116,7 @@
       "operator": "relational",
       "original": "value > maximum",
       "replacement": "false",
-      "outcome": "caught"
+      "outcome": "killed"
     },
     {
       "file": "src/clamp.ts",
@@ -124,7 +124,7 @@
       "operator": "block-removal",
       "original": "{\n    return maximum;\n  }",
       "replacement": "{}",
-      "outcome": "caught"
+      "outcome": "killed"
     }
   ]
 }

@@ -14,7 +14,7 @@ export function isAdult(age: number): boolean {
   return age >= 18;
 }
 
-// No test calls this, so its mutants are not reached.
+// No test calls this, so its mutants have no coverage.
 export function isBefore(a: number, b: number): boolean {
   return a < b;
 }
